@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import axios from 'axios';
 
-import Rating from '../components/Rating';
+import { Rating } from '../components';
 
 const ProductScreen = ({ match }) => {
   const [product, setProduct] = useState({});
