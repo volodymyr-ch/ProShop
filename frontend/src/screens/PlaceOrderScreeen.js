@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Col,
@@ -12,12 +12,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Message, CheckoutSteps } from '../components';
+import { createOrder } from '../actions';
 
-const PlaceOrderScreeen = () => {
+const PlaceOrderScreeen = ({ history }) => {
+  const dispatch = useDispatch();
+
   const cart = useSelector(({ cart }) => cart);
 
   // Calculate prices
-  const addDecimals = (num) => Math.round((num * 100) / 100).toFixed(2);
+  const addDecimals = (num) => num.toFixed(2);
   cart.itemsPrice = addDecimals(
     cart.cartItems.reduce((acc, cur) => acc + cur.price * cur.qty, 0)
   );
@@ -29,9 +32,30 @@ const PlaceOrderScreeen = () => {
     Number(cart.taxPrice)
   ).toFixed(2);
 
+  const { order, success, error } = useSelector(
+    ({ orderCreate }) => orderCreate
+  );
+
   const placeOrderHandler = (e) => {
-    console.log('order');
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        taxPrice: cart.taxPrice,
+        shippingPrice: cart.shippingPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
   };
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+    }
+    // eslint-disable-next-line
+  }, [history, success]);
 
   return (
     <>
@@ -117,6 +141,11 @@ const PlaceOrderScreeen = () => {
                   <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroupItem>
+              {error && (
+                <ListGroupItem>
+                  <Message variant="danger">{error}</Message>
+                </ListGroupItem>
+              )}
               <ListGroupItem>
                 <Button
                   type="button"

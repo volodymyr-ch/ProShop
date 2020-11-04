@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { stringify } from 'querystring';
 
 const orderSchema = mongoose.Schema(
   {
@@ -70,7 +69,7 @@ const orderSchema = mongoose.Schema(
     },
   },
   {
-    timestampts: true,
+    timestamps: true,
   }
 );
 
