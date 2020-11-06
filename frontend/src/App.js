@@ -12,6 +12,7 @@ import {
   ShippingScreen,
   PaymentScreen,
   PlaceOrderScreeen,
+  OrderScreen,
 } from './screens';
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/shipping" component={ShippingScreen} />
           <Route path="/payment" component={PaymentScreen} />
           <Route path="/placeorder" component={PlaceOrderScreeen} />
+          <Route path="/order/:id" component={OrderScreen} />
         </Container>
       </main>
       <Footer />
