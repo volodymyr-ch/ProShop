@@ -4,13 +4,16 @@ import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Message, Loader } from '../components';
-import { listUsers } from '../actions';
+import { listUsers, deleteUser } from '../actions';
 
 const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
 
   const { users, loading, error } = useSelector(({ userList }) => userList);
   const { userInfo } = useSelector(({ userLogin }) => userLogin);
+  const { success: successDelete, loading: loadingDelete } = useSelector(
+    ({ userDelete }) => userDelete
+  );
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
@@ -18,16 +21,18 @@ const UserListScreen = ({ history }) => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, userInfo]);
+  }, [dispatch, history, userInfo, successDelete]);
 
   const deleteHandler = (id) => {
-    console.log('delete', id);
+    if (window.confirm('Are you sure?')) {
+      dispatch(deleteUser(id));
+    }
   };
 
   return (
     <>
       <h1>Users</h1>
-      {loading ? (
+      {loading || loadingDelete ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
@@ -66,7 +71,7 @@ const UserListScreen = ({ history }) => {
                   <Button
                     variant="danger"
                     className="btn-sm"
-                    onClick={deleteHandler(user._id)}
+                    onClick={() => deleteHandler(user._id)}
                   >
                     <i className="fas fa-trash"></i>
                   </Button>
