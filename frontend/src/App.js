@@ -13,6 +13,7 @@ import {
   PaymentScreen,
   PlaceOrderScreeen,
   OrderScreen,
+  UserListScreen,
 } from './screens';
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/payment" component={PaymentScreen} />
           <Route path="/placeorder" component={PlaceOrderScreeen} />
           <Route path="/order/:id" component={OrderScreen} />
+          <Route path="/admin/userlist" component={UserListScreen} />
         </Container>
       </main>
       <Footer />
