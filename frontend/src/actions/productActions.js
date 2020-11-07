@@ -7,6 +7,7 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
+  PRODUCT_DETAILS_RESET,
   PRODUCT_DELETE_REQUEST,
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DELETE_FAIL,
@@ -147,3 +148,4 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 };
 
 export const resetUpdateProduct = () => ({ type: PRODUCT_UPDATE_RESET });
+export const resetProductDetails = () => ({ type: PRODUCT_DETAILS_RESET });
