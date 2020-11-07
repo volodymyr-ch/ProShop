@@ -4,9 +4,9 @@ import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Message, Loader, FormContainer } from '../components';
-import { getUserDetails, updateUserProfile } from '../actions';
+import { getUserDetails, updateUser, resetUpdate } from '../actions';
 
-const UserEditScreen = ({ location, match, history }) => {
+const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
 
   const [name, setName] = useState('');
@@ -19,19 +19,30 @@ const UserEditScreen = ({ location, match, history }) => {
     ({ userDetails }) => userDetails
   );
 
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = useSelector(({ userUpdate }) => userUpdate);
+
   useEffect(() => {
-    if (!user.name || user._id !== userId) {
-      dispatch(getUserDetails(userId));
-    } else if (user.name) {
-      setName(user.name);
-      setEmail(user.email);
-      setIsAdmin(user.isAdmin);
+    if (successUpdate) {
+      dispatch(resetUpdate());
+      history.push('/admin/userlist');
+    } else {
+      if (!user.name || user._id !== userId) {
+        dispatch(getUserDetails(userId));
+      } else if (user.name) {
+        setName(user.name);
+        setEmail(user.email);
+        setIsAdmin(user.isAdmin);
+      }
     }
-  }, [dispatch, user, userId]);
+  }, [dispatch, history, successUpdate, user, userId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUserProfile({ id: user._id, name, email, isAdmin }));
+    dispatch(updateUser({ _id: userId, name, email, isAdmin }));
   };
 
   return (
@@ -41,6 +52,8 @@ const UserEditScreen = ({ location, match, history }) => {
       </Link>
       <FormContainer>
         <h1>Edit user</h1>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
