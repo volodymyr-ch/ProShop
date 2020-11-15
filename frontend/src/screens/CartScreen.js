@@ -31,7 +31,7 @@ function CartScreen({ match, location, history }) {
   return (
     <Row>
       <Col md={8}>
-        <h1>Shopping cart</h1>
+        <h1>Shopping cart details</h1>
         {cartItems.length === 0 ? (
           <Message>
             Your cart is empty <Link to="/">Go Back</Link>
